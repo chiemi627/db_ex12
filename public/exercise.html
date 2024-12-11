@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>課題12：出身地で名簿検索</title>
+</head>
+
+<body>
+  <h1>課題12: 出身地で名簿検索 </h1>
+
+  <form name="form">
+    出身地：<input name="birthplace" />
+    <button id="sendButton" type="submit">検索する</button>
+  </form>
+  <h2 id="birthplace"></h2>
+  <ul id="results"></ul>
+
+  <script>
+    const div_birthplace = document.getElementById("birthplace");
+    const ul_results = document.getElementById("results");
+    
+    document.form.addEventListener("submit", async function (event) {
+      event.preventDefault(); //デフォルトのユーザ送信を防ぐ
+
+      const  birthplace = document.form.birthplace.value;
+      div_birthplace.innerHTML = `${birthplace}出身の方々`;
+  
+      try{
+        //サーバにリクエストを送る
+        const response = await fetch('/api/meibo/birthplace');
+        
+        //サーバから送られたデータを受け取ってdataに入れる
+        const data = await response.json();
+
+        //結果を1件ずつ表示する
+        data.forEach(item=>{
+          const listItem = document.createElement('li');
+          listItem.textContent = 
+            `${item.lastname} ${item.firstname}さん
+              (出身地：${item.birthplace}, 誕生日：${item.birthday})`;
+          ul_results.appendChild(listItem);          
+        });
+
+      }catch(err){
+        console.error(err);
+      }
+    });
+  </script>
+
+  <a href="index.html">トップページに戻る</a>
+</body>
+</html>

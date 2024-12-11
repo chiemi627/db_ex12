@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">​
+  <title>サンプル1：ランダムに10件表示</title>​
+</head>
+
+<body>
+  <h1>ランダムに10件表示</h1>
+  <ul id="results"></ul>
+
+  <script>
+    const ul_results = document.getElementById("results");
+    window.onload = async function(){
+      //検索結果部分
+
+      try{
+        //サーバにリクエストを送る
+        const response = await fetch('/api/meibo/random10');
+
+        //サーバから送られたデータを受け取ってdataに入れる
+        const data = await response.json();
+
+        //結果を1件ずつ表示する
+        data.forEach(item=>{
+          const listItem = document.createElement('li');
+          listItem.textContent = 
+            `${item.lastname} ${item.firstname}さん
+              (出身地：${item.birthplace}, 誕生日：${item.birthday})`;
+          ul_results.appendChild(listItem);          
+        });
+
+      }catch(err){
+        console.error(err);
+      }
+    }
+  </script>
+
+  <a href="index.html">トップページに戻る</a>
+</body>
+</html>

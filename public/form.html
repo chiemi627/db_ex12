@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    ​
+    <title>課題12-1:データベースを使ったWebアプリを作る</title>
+    ​
+  </head>
+
+  <body>
+    <form name="form">
+      <input name="message" />
+      <button id="sendButton" type="submit">検索する</button>
+    </form>
+    <ul>
+      <li>入力した内容：<span id="yourMessage"></span></li>
+      <li>サーバからの返事：<span id="serverMessage"></span></li>
+    </ul>
+    <a href="index.html">トップページに戻る</a>
+    
+    <script>
+      const yourmsg = document.getElementById("yourMessage");
+      const servermsg = document.getElementById("serverMessage");
+
+      document.form.addEventListener("submit", async function (event) {
+        event.preventDefault(); //デフォルトのユーザ送信を防ぐ
+
+        const message = document.form.message.value; //フォームの内容
+        yourmsg.innerHTML = message;
+
+        const params = {
+          method: "POST",
+          headers: { "Content-Type": "application/json"},
+          body: JSON.stringify({ message: message })
+        };
+
+        try{
+          response = await fetch("/api/hello",params);
+          const data = await response.json();
+          servermsg.innerHTML = data.serverMessage;
+          
+        } catch(err) {
+          console.error(err);
+        }
+     });
+    </script>
+    
+  </body>
+</html>

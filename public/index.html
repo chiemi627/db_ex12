@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">​
+  <title>課題12-1:データベースを使ったWebアプリを作る</title>​
+</head>
+
+<body>
+  こんにちは！
+  <div id="today"></div>
+  <p>
+  <ul>
+    <li><a href="random10.html">サンプル1：ランダムに10件表示</a></li>
+    <li><a href="form.html">サンプル2：フォーム値渡し</a></li>
+<li><a href="exercise.html">課題12:出身地で名簿検索</a></li>
+  </ul>
+
+  <script>
+    window.onload = async function(){
+      //今日の日付を代入
+      const today = document.getElementById("today");
+      
+      try{
+        //サーバにリクエストを送る
+        const response = await fetch('/api/today');
+
+        //サーバから送られたデータを受け取ってdataに入れる
+        const data = await response.json();
+
+        //今日の日付を入れる
+        const message =　`本日は${data['month']}月${data['day']}日です。`;
+        today.innerHTML = message;
+
+      }catch(err){
+        console.error(err);
+      }
+    }
+  </script>
+
+  
+</body>
+</html>
